@@ -1,0 +1,64 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Momomia · Birthday Manager</title>
+
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="icon"       href="{% static 'img/momomia_logo.png' %}">
+  </head>
+
+  <body>
+
+    <!-- ░░░ Top navigation ░░░ -->
+    <header class="nav">
+      <div class="nav__inner">
+        <!-- brand -->
+        <a class="brand" href="{% url 'upcoming_birthdays' %}">
+          Momomia
+        </a>
+
+        <!-- BUTTON‑style nav links -->
+        <nav class="nav-links">
+          <a class="nav-btn" href="{% url 'upcoming_birthdays' %}">Upcoming</a>
+          <a class="nav-btn" href="{% url 'customer_list' %}">Customers</a>
+          <a class="nav-btn" href="{% url 'customer_add' %}">Add Customer</a>
+        </nav>
+
+        <!-- auth -->
+        <div>
+          {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button class="btn btn-logout">Logout</button>
+            </form>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn">Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <!-- ░░░ Gradient hero background ░░░ -->
+    <div class="hero"><div class="hero__overlay"></div></div>
+
+    <!-- ░░░ Main card ░░░ -->
+    <main class="page">
+      {% if messages %}
+        {% for m in messages %}
+          <div class="alert {{ m.tags|default:'info' }}">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <section class="card">
+        {% block content %}{% endblock %}
+      </section>
+    </main>
+
+  </body>
+</html>

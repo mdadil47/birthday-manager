@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="form-heading">Delete {{ object.name }}?</h1>
+<p style="margin-bottom:2rem;">This action cannot be undone.</p>
+
+<div class="form-actions" style="justify-content:center;">
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+  </form>
+  <a href="{% url 'customer_list' %}" class="btn btn-secondary">Cancel</a>
+</div>
+{% endblock %}

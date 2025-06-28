@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="form-heading">All Customers</h1>
+
+<form method="get" style="margin-bottom:2rem;display:flex;gap:1rem;">
+  <input class="big-search" name="q" value="{{ q }}" placeholder="Search…">
+  <button class="btn btn-primary" type="submit">Search</button>
+  {% if q %}
+    <a href="{% url 'customer_list' %}" class="btn btn-secondary">Clear</a>
+  {% endif %}
+</form>
+
+<table class="table">
+  <thead>
+    <tr><th>Name</th><th>DOB</th><th>Email</th><th>Phone</th><th>Last Billing (₹)</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for c in customers %}
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.dob|date:"d M Y" }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.phone }}</td>
+        <td>{{ c.last_billing|default:"—" }}</td>
+        <td class="table-actions">
+          <a href="{% url 'customer_edit' c.pk %}" class="btn-xs btn-edit">Edit</a>
+          <a href="{% url 'customer_delete' c.pk %}" class="btn-xs btn-delete">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6" style="text-align:center;">No matching customers.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div style="margin-top:2.5rem;display:flex;justify-content:space-between;align-items:center;">
+  <div class="total-card">
+    <strong>Total billing:</strong>
+    ₹{{ total_billing|floatformat:2 }}
+  </div>
+  <a href="{% url 'customer_add' %}" class="btn btn-primary btn-add">Add Customer</a>
+</div>
+{% endblock %}

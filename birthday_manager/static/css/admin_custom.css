@@ -1,0 +1,47 @@
+/* ---- Brand colours ---- */
+:root{
+  --primary:   #4267B2;   /* same blue we used site‑wide */
+  --accent:    #ff9770;   /* optional secondary */
+}
+
+/* Header bar */
+#header{
+  background: var(--primary);
+}
+#header h1 a:link,
+#header h1 a:visited{
+  color:#fff;
+}
+#user-tools a{ color:#e9ebee; }
+#user-tools a:hover{ color:#fff; }
+
+/* Login page */
+.login #container{
+  border-top: 8px solid var(--primary);
+}
+.login h1 a{
+  background-image: url(/static/img/momomia_logo.png);
+  background-size: 40px 40px;
+}
+
+/* Buttons & links */
+.button, input[type=submit]{
+  background: var(--primary);
+  border-color: var(--primary);
+  color:#fff;
+}
+.button:hover, input[type=submit]:hover{
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Table headers */
+#content-main th{
+  background: var(--primary);
+  color:#fff;
+}
+
+/* Selected rows in list view */
+tr.selected{
+  background: #e0e7ff !important;
+}

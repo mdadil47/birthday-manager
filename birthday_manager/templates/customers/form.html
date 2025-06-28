@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="form-heading">
+  {% if view.object %}Edit{% else %}Add{% endif %}&nbsp;Customer
+</h1>
+
+<form method="post" class="customer-form">
+  {% csrf_token %}
+
+  <!-- ───────── Grid ───────── -->
+  <div class="form-grid">
+    <div class="field">{{ form.name.label_tag }}{{ form.name }}</div>
+    <div class="field">{{ form.dob.label_tag }}{{ form.dob }}</div>
+
+    <div class="field">{{ form.email.label_tag }}{{ form.email }}</div>
+    <div class="field">{{ form.phone.label_tag }}{{ form.phone }}</div>
+
+    <div class="field">{{ form.last_visit.label_tag }}{{ form.last_visit }}</div>
+   <div class="field">
+    {{ form.last_billing.label_tag }}
+    {{ form.last_billing }}
+</div>
+
+
+  <!-- ───────── Actions ───────── -->
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">
+      <i class="fa-solid fa-floppy-disk"></i>&nbsp;Save
+    </button>
+    <a href="{% url 'customer_list' %}" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+{% endblock %}

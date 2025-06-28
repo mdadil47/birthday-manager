@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Momomia Admin{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/admin_custom.css' %}">
+{% endblock %}
+
+{% block branding %}
+  <h1 id="site-name">
+      <a href="{% url 'admin:index' %}">
+        
+        Momomia&nbsp;<span style="font-weight:300;">Admin</span>
+      </a>
+  </h1>
+{% endblock %}

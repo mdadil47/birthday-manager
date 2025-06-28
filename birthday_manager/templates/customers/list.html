@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="form-heading">
+  Upcoming Birthdays <small style="font-weight:400;">(next 30 days)</small>
+</h1>
+
+<table class="table">
+  <thead>
+    <tr><th>Name</th><th>Date</th><th>Email</th><th>Phone</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for c in customers %}
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.next_birthday|date:"d M Y" }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.phone }}</td>
+        <td class="table-actions">
+          <a href="{% url 'customer_edit' c.pk %}" class="btn-xs btn-edit">Edit</a>
+          <a href="{% url 'customer_delete' c.pk %}" class="btn-xs btn-delete">Delete</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" style="text-align:center;">No birthdays in the next 30 days.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
