@@ -1,6 +1,6 @@
 """
 Django settings for Birthday‑Manager project.
-Works out‑of‑the‑box on Railway and local dev.
+Compatible with local dev and Railway deployment.
 """
 
 from pathlib import Path
@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 import dj_database_url
 
 # ──────────────────────────────────────────────
-# 0. Load .env if present (local dev)
+# 0. Load .env (for local dev only)
 # ──────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -18,13 +18,14 @@ load_dotenv(BASE_DIR / ".env")
 # 1. Core settings
 # ──────────────────────────────────────────────
 SECRET_KEY = os.getenv("SECRET_KEY", "dev‑insecure‑key‑change‑me")
-
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-# Railway provides your default domain; add custom ones separated by commas.
-ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS",
-    "127.0.0.1,localhost,birthday-manager-production.up.railway.app"
+# Hosts & CSRF
+DEFAULT_HOST = "birthday-manager-production.up.railway.app"
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", f"127.0.0.1,localhost,{DEFAULT_HOST}").split(",")
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS",
+    f"https://{DEFAULT_HOST}"
 ).split(",")
 
 # ──────────────────────────────────────────────
@@ -72,13 +73,11 @@ TEMPLATES = [
 WSGI_APPLICATION = "birthday_manager.wsgi.application"
 
 # ──────────────────────────────────────────────
-# 3. Database – defaults to SQLite, switches to Postgres on Railway
+# 3. Database
 # ──────────────────────────────────────────────
 if os.getenv("DATABASE_URL"):
     DATABASES = {
-        "default": dj_database_url.config(
-            conn_max_age=600, ssl_require=True
-        )
+        "default": dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
 else:
     DATABASES = {
@@ -110,8 +109,8 @@ USE_TZ = True
 # 6. Static & media files
 # ──────────────────────────────────────────────
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"        # Gunicorn serves this
-STATICFILES_DIRS = [BASE_DIR / "static"]      # your app-level static
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -122,13 +121,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ──────────────────────────────────────────────
-# 8. Login / logout redirects
+# 8. Login redirects
 # ──────────────────────────────────────────────
 LOGIN_REDIRECT_URL = "upcoming_birthdays"
 LOGOUT_REDIRECT_URL = "login"
 
 # ──────────────────────────────────────────────
-# 9. Security tweaks for production
+# 9. Security for production
 # ──────────────────────────────────────────────
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
