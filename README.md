@@ -16,4 +16,4 @@ A Django-based web application to manage customer birthdays and last visits for 
 - **Backend:** Django (Python)
 - **Frontend:** HTML, CSS
 - **Database:** SQLite
-- **Deployment:** Docker, Render
+- **Deployment:** Docker,Railway
