@@ -1,14 +1,19 @@
-# BirthdayManager
+# 🎂 Birthday Manager
 
-A Django 5.x web application that helps restaurants track upcoming customer birthdays and automatically send greeting emails.
+A Django-based web application to manage customer birthdays and last visits for small businesses.
 
-## Features
+## 🚀 Features
 
-* CRUD customer records (name, DOB, contact info, favorite dish)
-* Dashboard showing birthdays in the next 30 days
-* Daily Celery task to send birthday emails at 09:00 (Asia/Kolkata)
-* Django admin for data entry
-* SQLite by default; switch to PostgreSQL by editing `settings.py`
-* Minimal Tailwind‑style CSS
+- User authentication (login/logout)
+- Add, update, and delete customer records
+- Track birthdays and last visit dates
+- Responsive UI using HTML/CSS
+- Dockerized for production deployment
+- Deployed on Render with SQLite
 
+## 🛠️ Tech Stack
 
+- **Backend:** Django (Python)
+- **Frontend:** HTML, CSS
+- **Database:** SQLite
+- **Deployment:** Docker, Render
