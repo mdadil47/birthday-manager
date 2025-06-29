@@ -1,38 +1,26 @@
-# ─────────────────────────
-# 1. Base image
-# ─────────────────────────
+# ---- Base image ----
 FROM python:3.11-slim
 
-# Install system libs for psycopg2 / Pillow if needed
-RUN apt-get update && \
-    apt-get install -y gcc libpq-dev && \
-    rm -rf /var/lib/apt/lists/*
+# Prevent Python from buffering stdout/stderr
+ENV PYTHONUNBUFFERED=1
 
-# ─────────────────────────
-# 2. Environment
-# ─────────────────────────
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
+# Set work directory
 WORKDIR /app
 
-# ─────────────────────────
-# 3. Install deps
-# ─────────────────────────
+# ---- Install dependencies ----
+# (Copy requirements first to leverage Docker layer caching)
 COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# ─────────────────────────
-# 4. Copy project code
-# ─────────────────────────
+# ---- Copy project ----
 COPY . .
 
-# ─────────────────────────
-# 5. Start script
-# ─────────────────────────
-# Runs migrations, collects static, then starts Gunicorn
-CMD ["sh", "-c", \
-    "python manage.py migrate --noinput && \
-     python manage.py collectstatic --noinput && \
-     gunicorn birthday_manager.wsgi:application --bind 0.0.0.0:8000"]
+# ---- Collect static and run migrations at build time ----
+#   • If you prefer to migrate at runtime, delete the migrate line here
+#   • Ensure 'DEBUG=False' and Whitenoise/static settings are already in settings.py
+RUN python manage.py collectstatic --noinput
+RUN python manage.py migrate --noinput
+
+# ---- Gunicorn entrypoint ----
+# Render sets $PORT automatically; most other hosts do the same.
+CMD ["gunicorn", "birthday_manager.wsgi:application", "--bind", "0.0.0.0:${PORT:-8080}"]
