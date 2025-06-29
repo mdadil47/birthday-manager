@@ -15,7 +15,7 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 # Properly parse ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS from env
 hosts_env = os.getenv("ALLOWED_HOSTS", "localhost 127.0.0.1")
-ALLOWED_HOSTS = [h for h in hosts_env.replace(",", " ").split() if h]
+ALLOWED_HOSTS = ["birthday-manager-production.up.railway.app"]
 
 CSRF_TRUSTED_ORIGINS = [
     f"https://{h}" for h in ALLOWED_HOSTS if not h.startswith(("localhost", "127."))
